@@ -23,13 +23,11 @@ RUN dotnet publish -c Release -o /app
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 
-# Copy the published output from build container
-COPY --from=build /app .
+# Copy published files from host to container
+COPY out/ .
 
-# Expose port and set env vars
 EXPOSE 5000
 ENV DOTNET_RUNNING_IN_CONTAINER=true \
     ASPNETCORE_URLS=http://0.0.0.0:5000
 
-# Run the app
 ENTRYPOINT ["dotnet", "MyWebApp.dll"]
