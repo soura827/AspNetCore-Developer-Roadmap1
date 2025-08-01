@@ -4,13 +4,17 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /source
 
-# Copy csproj first to leverage Docker cache
+# Copy only the .csproj file
 COPY MyWebApp/*.csproj ./MyWebApp/
+
+# Restore dependencies
 WORKDIR /source/MyWebApp
 RUN dotnet restore
 
-# Copy all source files
-COPY MyWebApp/. .
+# Copy the entire source
+COPY . .
+
+# Publish the application
 RUN dotnet publish -c Release -o /app
 
 # ----------------------
